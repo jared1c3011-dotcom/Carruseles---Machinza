@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machinza — Sterile Filling Line</title>
+<style>
+  :root{
+    --navy: #0b1c2c;
+    --navy-2: #10283f;
+    --steel: #1f3b52;
+    --grey: #8a99a8;
+    --light: #eef2f5;
+    --accent: #00c2b2;
+    --accent-2: #ff8a3d;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html,body{
+    height:100%;
+    background:#05090d;
+    font-family:'Segoe UI', Arial, sans-serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .carousel-wrap{
+    position:relative;
+    width:100%;
+    max-width:480px;
+    aspect-ratio:4/5;
+    background:var(--navy);
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,0.6);
+  }
+
+  .slides{
+    display:flex;
+    height:100%;
+    width:100%;
+    transition:transform 0.5s cubic-bezier(.65,.05,.36,1);
+  }
+
+  .slide{
+    min-width:100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    padding:40px 36px;
+    background:linear-gradient(160deg, var(--navy) 0%, var(--navy-2) 100%);
+  }
+
+  .slide-content{
+    width:100%;
+    text-align:center;
+    color:var(--light);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+  }
+
+  .brand-tag{
+    position:absolute;
+    top:20px;
+    left:0;
+    right:0;
+    text-align:center;
+    font-size:12px;
+    letter-spacing:4px;
+    color:var(--accent);
+    font-weight:700;
+    z-index:5;
+  }
+
+  .slide-number{
+    position:absolute;
+    bottom:16px;
+    right:20px;
+    font-size:11px;
+    color:var(--grey);
+    letter-spacing:2px;
+  }
+
+  h1{
+    font-size:30px;
+    line-height:1.2;
+    font-weight:800;
+    color:#ffffff;
+  }
+
+  h2{
+    font-size:24px;
+    line-height:1.25;
+    font-weight:800;
+    color:#ffffff;
+    margin-bottom:6px;
+  }
+
+  p{
+    font-size:15px;
+    line-height:1.55;
+    color:var(--light);
+    max-width:380px;
+  }
+
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:3px;
+    color:var(--accent-2);
+    font-weight:700;
+    text-transform:uppercase;
+  }
+
+  .divider{
+    width:50px;
+    height:3px;
+    background:var(--accent);
+    border-radius:3px;
+    margin:6px 0;
+  }
+
+  .icon-row{
+    display:flex;
+    gap:18px;
+    margin-top:8px;
+  }
+
+  .icon-box{
+    width:60px;
+    height:60px;
+    border-radius:12px;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.1);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
+  }
+
+  .stat-box{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:14px;
+    padding:16px 22px;
+    margin-top:10px;
+  }
+
+  .stat-number{
+    font-size:34px;
+    font-weight:800;
+    color:var(--accent);
+  }
+
+  .stat-label{
+    font-size:12px;
+    color:var(--grey);
+    letter-spacing:1px;
+    text-transform:uppercase;
+  }
+
+  /* ---- Slide 1: animated intro ---- */
+  .slide-1 .slide-content{
+    position:relative;
+  }
+
+  .logo-big{
+    font-size:44px;
+    font-weight:900;
+    letter-spacing:2px;
+    color:#ffffff;
+    opacity:0;
+    animation: fadeScale 0.9s ease forwards;
+  }
+
+  .logo-big span{
+    color:var(--accent);
+  }
+
+  .subtitle-anim{
+    opacity:0;
+    transform:translateY(20px);
+    animation: slideUp 0.8s ease forwards;
+    animation-delay:0.5s;
+  }
+
+  .title-anim{
+    opacity:0;
+    transform:scale(0.85);
+    animation: fadeScale 0.9s ease forwards;
+    animation-delay:0.8s;
+  }
+
+  .pill-anim{
+    opacity:0;
+    animation: fadeIn 0.7s ease forwards;
+    animation-delay:1.3s;
+  }
+
+  .pulse-ring{
+    position:absolute;
+    width:220px;
+    height:220px;
+    border-radius:50%;
+    border:2px solid var(--accent);
+    opacity:0;
+    animation: ringPulse 2.5s ease-out infinite;
+    animation-delay:1.6s;
+  }
+
+  .droplet{
+    position:absolute;
+    width:8px;
+    height:8px;
+    background:var(--accent-2);
+    border-radius:50% 50% 50% 0;
+    transform:rotate(45deg);
+    top:-20px;
+    opacity:0;
+    animation: dropFall 2.2s ease-in infinite;
+  }
+
+  .droplet.d1{ left:30%; animation-delay:1.8s;}
+  .droplet.d2{ left:50%; animation-delay:2.2s;}
+  .droplet.d3{ left:70%; animation-delay:2.6s;}
+
+  @keyframes fadeScale{
+    from{opacity:0; transform:scale(0.8);}
+    to{opacity:1; transform:scale(1);}
+  }
+
+  @keyframes slideUp{
+    from{opacity:0; transform:translateY(20px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  @keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+  }
+
+  @keyframes ringPulse{
+    0%{ transform:scale(0.6); opacity:0.8;}
+    80%{ transform:scale(1.3); opacity:0;}
+    100%{ transform:scale(1.3); opacity:0;}
+  }
+
+  @keyframes dropFall{
+    0%{ top:-20px; opacity:0;}
+    10%{ opacity:1;}
+    70%{ opacity:1;}
+    100%{ top:220px; opacity:0;}
+  }
+
+  /* ---- Nav buttons ---- */
+  .nav-btn{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.25);
+    color:#fff;
+    font-size:20px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:10;
+    transition:background 0.25s ease, transform 0.2s ease;
+    user-select:none;
+  }
+
+  .nav-btn:hover{
+    background:var(--accent);
+    color:var(--navy);
+  }
+
+  .nav-prev{ left:14px; }
+  .nav-next{ right:14px; }
+
+  .dots{
+    position:absolute;
+    bottom:14px;
+    left:0;
+    right:0;
+    display:flex;
+    justify-content:center;
+    gap:6px;
+    z-index:10;
+  }
+
+  .dot{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.3);
+    transition:all 0.3s ease;
+  }
+
+  .dot.active{
+    background:var(--accent);
+    width:18px;
+    border-radius:4px;
+  }
+
+  .badge{
+    display:inline-block;
+    background:rgba(0,194,178,0.15);
+    color:var(--accent);
+    border:1px solid rgba(0,194,178,0.4);
+    padding:4px 12px;
+    border-radius:20px;
+    font-size:11px;
+    letter-spacing:1.5px;
+    font-weight:700;
+    text-transform:uppercase;
+  }
+
+  .cta-btn{
+    margin-top:14px;
+    background:var(--accent);
+    color:var(--navy);
+    font-weight:800;
+    padding:12px 28px;
+    border-radius:30px;
+    font-size:14px;
+    letter-spacing:1px;
+    box-shadow:0 8px 20px rgba(0,194,178,0.3);
+  }
+
+</style>
+</head>
+<body>
+
+<div class="carousel-wrap">
+  <div class="slides" id="slidesTrack">
+
+    <!-- SLIDE 1 -->
+    <div class="slide slide-1" data-slide-index="0">
+      <div class="brand-tag">MACHINZA</div>
+      <div class="pulse-ring"></div>
+      <div class="droplet d1"></div>
+      <div class="droplet d2"></div>
+      <div class="droplet d3"></div>
+      <div class="slide-content">
+        <div class="logo-big">MACH<span>INZA</span></div>
+        <div class="subtitle-anim eyebrow">Pharmaceutical Engineering</div>
+        <div class="title-anim">
+          <h1>Sterile Filling Line</h1>
+        </div>
+        <div class="pill-anim badge">Swipe to learn how it works →</div>
+      </div>
+      <div class="slide-number">01 / 07</div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide" data-slide-index="1">
+      <div class="brand-tag">MACHINZA</div>
+      <div class="slide-content">
+        <div class="eyebrow">What Is It</div>
+        <h2>Sterile Filling, Defined</h2>
+        <div class="divider"></div>
+        <p>Sterile filling is the process of dosing a liquid or powder product into its final container — vial, ampoule, or syringe — inside a controlled environment free of microbial contamination.</p>
+        <p>Every drop matters. One contaminated unit can compromise an entire production batch.</p>
+      </div>
+      <div class="slide-number">02 / 07</div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide" data-slide-index="2">
+      <div class="brand-tag">MACHINZA</div>
+      <div class="slide-content">
+        <div class="eyebrow">The Environment</div>
+        <h2>Inside the Cleanroom</h2>
+        <div class="divider"></div>
+        <p>Filling happens inside an ISO-classified cleanroom, where air filtration, pressure control, and strict gowning protocols keep particle and microbial counts near zero.</p>
+        <div class="icon-row">
+          <div class="icon-box">🧪</div>
+          <div class="icon-box">💨</div>
+          <div class="icon-box">🧤</div>
+        </div>
+      </div>
+      <div class="slide-number">03 / 07</div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="slide" data-slide-index

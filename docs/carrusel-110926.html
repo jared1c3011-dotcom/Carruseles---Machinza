@@ -30,26 +30,14 @@
   }
 
   .app{
-    width:100%;
-    max-width:480px;
-    height:100vh;
-    max-height:600px;
+    width:min(480px, 92vw);
+    height:min(600px, 90vh);
     position:relative;
     background:var(--navy-950);
-    border-radius:0;
+    border-radius:14px;
     overflow:hidden;
     box-shadow:0 0 60px rgba(0,0,0,0.6);
   }
-
-  @media (min-width:520px){
-    .app{
-      aspect-ratio:4/5;
-      height:auto;
-      max-height:90vh;
-      border-radius:14px;
-    }
-  }
-
   .carousel-track{
     position:absolute;
     inset:0;

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machinza | Sterile Filling Line</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #05080d;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    overflow:hidden;
+  }
+
+  .carousel-wrap {
+    position:relative;
+    width: 100%;
+    max-width: 480px;
+    aspect-ratio: 4/5;
+    background: #0d1b2a;
+    border-radius: 14px;
+    overflow:hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  }
+
+  .slide {
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding: 42px 38px;
+    color:#e8edf2;
+    background:
+      radial-gradient(circle at 80% 10%, rgba(0,184,212,0.12), transparent 40%),
+      linear-gradient(160deg, #0d1b2a 0%, #14283d 55%, #0a1622 100%);
+  }
+
+  .slide.active {
+    display:flex;
+  }
+
+  .brand {
+    position:absolute;
+    top:22px;
+    left:28px;
+    font-size:14px;
+    letter-spacing:4px;
+    font-weight:700;
+    color:#6fd8e8;
+    z-index:5;
+  }
+
+  .brand.center-logo {
+    position:static;
+    font-size:30px;
+    letter-spacing:6px;
+    color:#7fe3f2;
+    margin-bottom: 18px;
+    text-shadow: 0 0 25px rgba(111,216,232,0.5);
+  }
+
+  .slide-tag {
+    text-transform:uppercase;
+    letter-spacing:3px;
+    font-size:12px;
+    color:#5fb8c9;
+    font-weight:600;
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-size: 34px;
+    line-height:1.2;
+    font-weight:800;
+    color:#ffffff;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: 26px;
+    line-height:1.25;
+    font-weight:800;
+    color:#ffffff;
+    margin-bottom: 14px;
+  }
+
+  p {
+    font-size: 16.5px;
+    line-height:1.55;
+    color:#c4d2de;
+    max-width: 380px;
+  }
+
+  .divider {
+    width:60px;
+    height:3px;
+    background: linear-gradient(90deg,#00b8d4,#0d5c73);
+    margin: 18px auto;
+    border-radius:3px;
+  }
+
+  .icon-row {
+    display:flex;
+    gap:22px;
+    margin: 22px 0 8px 0;
+    font-size:34px;
+  }
+
+  .badge {
+    display:inline-block;
+    margin-top: 20px;
+    padding: 8px 18px;
+    border: 1px solid rgba(111,216,232,0.4);
+    border-radius: 30px;
+    font-size:12.5px;
+    letter-spacing:1.5px;
+    color:#8fe3f0;
+    text-transform:uppercase;
+  }
+
+  .list {
+    text-align:left;
+    max-width: 360px;
+    margin-top: 10px;
+  }
+  .list div {
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    margin-bottom: 14px;
+    font-size:15.5px;
+    color:#d3dee8;
+    line-height:1.4;
+  }
+  .list span.num {
+    flex-shrink:0;
+    width:26px;
+    height:26px;
+    border-radius:50%;
+    background: rgba(0,184,212,0.15);
+    border:1px solid #00b8d4;
+    color:#7fe3f2;
+    font-size:13px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  /* --- Slide 1 animations --- */
+  #slide-0 .brand.center-logo {
+    animation: dropIn 0.8s ease-out both;
+  }
+  #slide-0 .slide-tag {
+    animation: fadeUp 0.9s ease-out 0.3s both;
+  }
+  #slide-0 h1 {
+    animation: fadeUp 0.9s ease-out 0.5s both;
+  }
+  #slide-0 .divider {
+    animation: growLine 0.7s ease-out 0.8s both;
+  }
+  #slide-0 p {
+    animation: fadeUp 0.9s ease-out 1s both;
+  }
+  #slide-0 .badge {
+    animation: pulseIn 1s ease-out 1.3s both;
+  }
+  #slide-0::before {
+    content:"";
+    position:absolute;
+    width:220px; height:220px;
+    background: radial-gradient(circle, rgba(0,184,212,0.25), transparent 70%);
+    top:-60px; right:-60px;
+    border-radius:50%;
+    animation: floatGlow 4s ease-in-out infinite;
+  }
+
+  @keyframes dropIn {
+    0% { opacity:0; transform: translateY(-40px) scale(0.8); }
+    60% { opacity:1; transform: translateY(6px) scale(1.05); }
+    100% { opacity:1; transform: translateY(0) scale(1); }
+  }
+  @keyframes fadeUp {
+    0% { opacity:0; transform: translateY(24px); }
+    100% { opacity:1; transform: translateY(0); }
+  }
+  @keyframes growLine {
+    0% { width:0; opacity:0; }
+    100% { width:60px; opacity:1; }
+  }
+  @keyframes pulseIn {
+    0% { opacity:0; transform: scale(0.7); }
+    70% { opacity:1; transform: scale(1.08); }
+    100% { opacity:1; transform: scale(1); }
+  }
+  @keyframes floatGlow {
+    0%,100% { transform: translate(0,0); }
+    50% { transform: translate(-15px, 15px); }
+  }
+
+  /* Nav buttons */
+  .nav-btn {
+    position:absolute;
+    top:50%;
+    transform: translateY(-50%);
+    background: rgba(13,27,42,0.75);
+    border: 1px solid rgba(111,216,232,0.35);
+    color:#e8edf2;
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-size:20px;
+    z-index:10;
+    transition: background 0.2s, transform 0.2s;
+    user-select:none;
+  }
+  .nav-btn:hover {
+    background: rgba(0,184,212,0.3);
+    transform: translateY(-50%) scale(1.08);
+  }
+  .nav-left { left: 14px; }
+  .nav-right { right: 14px; }
+
+  .dots {
+    position:absolute;
+    bottom: 16px;
+    left:0; right:0;
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    z-index:10;
+  }
+  .dot {
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background: rgba(255,255,255,0.25);
+    transition: all 0.25s;
+  }
+  .dot.active {
+    background: #00b8d4;
+    width:20px;
+    border-radius:4px;
+  }
+
+  .counter {
+    position:absolute;
+    top:22px;
+    right:28px;
+    font-size:12px;
+    color:#7fa2b3;
+    letter-spacing:1px;
+    z-index:5;
+  }
+</style>
+</head>
+<body>
+
+<div class="carousel-wrap" id="carousel" tabindex="0">
+
+  <!-- Slide 1 -->
+  <div class="slide active" id="slide-0">
+    <div class="counter">01 / 04</div>
+    <div class="brand center-logo">MACHINZA</div>
+    <div class="slide-tag">Pharma / Production</div>
+    <h1>Inside a Sterile Filling Line</h1>
+    <div class="divider"></div>
+    <p>How precision engineering turns liquid or powder into safe, ready-to-use pharmaceutical doses.</p>
+    <div class="badge">Swipe to learn how it works</div>
+  </div>
+
+  <!-- Slide 2 -->
+  <div class="slide" id="slide-1">
+    <div class="brand">MACHINZA</div>
+    <div class="counter">02 / 04</div>
+    <div class="slide-tag">What is Sterile Filling?</div>
+    <h2>Zero Room for Contamination</h2>
+    <p>Sterile filling is the process of dosing a drug product into its final container inside a cleanroom, where air, surfaces, and equipment are controlled to near-zero particle and microbial levels.</p>
+    <div class="icon-row">
+      <span>🧫</span>
+      <span>🧤</span>
+      <span>💧</span>
+    </div>
+    <p>Every valve, seal, and surface is designed to keep the product isolated from human and environmental contact.</p>
+  </div>
+
+  <!-- Slide 3 -->
+  <div class="slide" id="slide-2">
+    <div class="brand">MACHINZA</div>
+    <div class="counter">03 / 04</div>
+    <div class="slide-tag">How The Machine Works</div>
+    <h2>Dosing With Micro-Precision</h2>
+    <div class="list">
+      <div><span class="num">1</span> Vials, ampoules, or syringes move in sync on the line.</div>
+      <div><span class="num">2</span> A dosing pump measures each shot of liquid or powder to exact volume.</div>
+      <div><span class="num">3</span> The nozzle fills the container inside the cleanroom, without human contact.</div>
+      <div><span class="num">4</span> Sensors verify every fill in real time before sealing.</div>
+    </div>
+  </div>
+
+  <!-- Slide 4 -->
+  <div class="slide" id="slide-3">
+    <div class="brand">MACHINZA</div>
+    <div class="counter">04 / 04</div>
+    <div class="slide-tag">Why It Matters</div>
+    <h2>Precision Protects Patients</h2>
+    <p>A fill that's off by even a fraction of a milliliter can under-dose a patient or force an entire batch to be discarded.</p>
+    <div class="divider"></div>
+    <p>Accurate, repeatable dosing is what keeps a pharmaceutical line compliant, profitable, and above all, safe for the people who depend on it.</p>
+    <div class="badge">Machinza · Industrial Engineering</div>
+  </div>
+
+  <div class="nav-btn nav-left" onclick="changeSlide(-1)">&#10094;</div>
+  <div class="nav-btn nav-right" onclick="changeSlide(1)">&#10095;</div>
+
+  <div class="dots">
+    <div class="dot active" data-

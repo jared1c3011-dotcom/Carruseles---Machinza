@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machinza — Sterile Filling Line Mistakes</title>
+<style>
+  * { box-sizing: border-box; margin:0; padding:0; }
+  body {
+    background: #0d1420;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .carousel-wrap {
+    width: min(480px, 92vw);
+    height: min(600px, 90vh);
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    background: #101826;
+  }
+
+  .slides-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s cubic-bezier(.65,.05,.36,1);
+  }
+
+  .slide {
+    min-width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 60px 32px 40px 32px;
+    position: relative;
+    overflow-y: auto;
+    color: #eef2f7;
+  }
+
+  .slide-header {
+    position: absolute;
+    top: 18px;
+    left: 24px;
+    right: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .tag {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: #7fa8d9;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* SLIDE 1 - INTRO */
+  .slide-1 {
+    background: linear-gradient(160deg, #0b1220 0%, #142238 55%, #1c3153 100%);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .intro-eyebrow {
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: #4fa3e3;
+    text-transform: uppercase;
+    font-weight: 700;
+    opacity: 0;
+    animation: fadeSlideUp 0.7s ease-out 0.2s forwards;
+  }
+
+  .intro-title {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-top: 14px;
+    color: #ffffff;
+    opacity: 0;
+    animation: scaleIn 0.8s ease-out 0.45s forwards;
+  }
+
+  .intro-title span {
+    color: #5fb4ff;
+  }
+
+  .intro-sub {
+    font-size: 14px;
+    color: #b9c6d8;
+    margin-top: 18px;
+    max-width: 320px;
+    line-height: 1.5;
+    opacity: 0;
+    animation: fadeSlideUp 0.7s ease-out 0.75s forwards;
+  }
+
+  .pulse-ring {
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    border: 1px solid rgba(95,180,255,0.3);
+    border-radius: 50%;
+    animation: pulseRing 2.4s ease-out infinite;
+  }
+
+  .pulse-ring.delay {
+    animation-delay: 0.8s;
+  }
+
+  .drop-icon {
+    width: 46px;
+    height: 46px;
+    margin-bottom: 6px;
+    opacity: 0;
+    animation: dropIn 0.6s ease-out 0s forwards;
+  }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes pulseRing {
+    0% { transform: scale(0.6); opacity: 0.8; }
+    100% { transform: scale(1.4); opacity: 0; }
+  }
+
+  @keyframes dropIn {
+    0% { opacity: 0; transform: translateY(-20px) rotate(-15deg); }
+    60% { opacity: 1; transform: translateY(4px) rotate(5deg); }
+    100% { opacity: 1; transform: translateY(0) rotate(0deg); }
+  }
+
+  /* GENERAL SLIDES */
+  .slide-2, .slide-3, .slide-4 {
+    background: #101826;
+  }
+
+  .mistake-badge {
+    display: inline-block;
+    background: rgba(220, 90, 60, 0.15);
+    color: #ff8b6b;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+
+  .slide-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+
+  .slide-title .accent {
+    color: #5fb4ff;
+  }
+
+  .slide-text {
+    font-size: 14px;
+    line-height: 1.55;
+    color: #c3ccd9;
+    margin-bottom: 14px;
+  }
+
+  .consequence-box {
+    background: rgba(255,255,255,0.04);
+    border-left: 3px solid #dc5a3c;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #f0d4c8;
+    line-height: 1.45;
+  }
+
+  .consequence-box b {
+    color: #ff8b6b;
+  }
+
+  .divider-line {
+    width: 100%;
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 16px 0;
+  }
+
+  .fix-badge {
+    display: inline-block;
+    background: rgba(60, 160, 120, 0.18);
+    color: #6fe0ac;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+
+  .fix-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .fix-list li {
+    font-size: 13.5px;
+    color: #d5dde8;
+    line-height: 1.4;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .fix-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 8px;
+    height: 8px;
+    background: #5fb4ff;
+    border-radius: 2px;
+  }
+
+  .cta-line {
+    margin-top: 18px;
+    font-size: 13px;
+    color: #8fa7c4;
+    font-style: italic;
+  }
+
+  /* NAV CONTROLS */
+  .nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(15, 22, 36, 0.75);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #eef2f7;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 10;
+    transition: background 0.2s, transform 0.2s;
+    user-select: none;
+  }
+
+  .nav-btn:hover {
+    background: rgba(95, 180, 255, 0.35);
+  }
+
+  .nav-btn.prev { left: 12px; }
+  .nav-btn.next { right: 12px; }
+
+  .dots {
+    position: absolute;
+    bottom: 14px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+    z-index: 10;
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    transition: background 0.3s, transform 0.3s;
+  }
+
+  .dot.active {
+    background: #5fb4ff;
+    transform: scale(1.3);
+  }
+
+  .step-counter {
+    font-size: 10px;
+    color: #7fa8d9;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<div class="carousel-wrap" tabindex="0" id="carousel">
+
+  <div class="slides-track" id="track">
+
+    <!-- SLIDE 1 -->
+    <div class="slide slide-1">
+      <div class="slide-header">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+        <span class="step-counter">01 / 04</span>
+      </div>
+      <div class="pulse-ring"></div>
+      <div class="pulse-ring delay"></div>
+      <svg class="drop-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C12 2 5 11 5 15.5C5 19.09 8.13 22 12 22C15.87 22 19 19.09 19 15.5C19 11 12 2 12 2Z" fill="#5fb4ff"/>
+      </svg>
+      <p class="intro-eyebrow">Pharmaceutical Production</p>
+      <h1 class="intro-title">Sterile Filling Lines:<br><span>3 Mistakes</span> That Cause Batch Rejection</h1>
+      <p class="intro-sub">Swipe through to see what goes wrong on the line — and how to prevent it.</p>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide slide-2">
+      <div class="slide-header">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+        <span class="step-counter">02 / 04</span>
+      </div>
+      <span class="mistake-badge">Mistake 01</span>
+      <h2 class="slide-title">Miscalibrated <span class="accent">Filling Head</span></h2>
+      <p class="slide-text">A filling head that drifts out of calibration delivers inconsistent doses — some vials underfilled, others overfilled.</p>
+      <div class="consequence-box"><b>Consequence:</b> Out-of-spec fill volumes trigger automatic batch rejection during QA checks.</div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide slide-3">
+      <div class="slide-header">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+        <span class="step-counter">03 / 04</span>
+      </div>
+      <span class="mistake-badge">Mistakes 02 &amp; 03</span>
+      <h2 class="slide-title">Viscosity Shifts &amp; Poor <span class="accent">Line Sync</span></h2>
+      <p class="slide-text">Temperature-driven viscosity changes throw off dosing accuracy, while unsynced filling, capping and conveying create jams.</p>
+      <div class="divider-line"></div>
+      <div class="consequence-box"><b>Consequence:</b> Contamination risk, vial breakage and stalled lines — all leading to lot rejection.</div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="slide slide-4">
+      <div class="slide-header">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+        <span class="step-counter">04 / 04</span>
+      </div>
+      <span class="fix-badge">The Fix</span>
+      <h2 class="slide-title">Control &amp; <span class="accent">Automation</span></h2>
+      <ul class="fix-list">
+        <li>PLC-based real-time monitoring keeps the filling head calibrated automatically.</li>
+        <li>Servo-driven dosing compensates for viscosity changes on the fly.</li>
+        <li>Synchronized conveyor logic aligns filling, capping and transport.</li>
+      </ul>
+      <p class="cta-line">Reduce rejected lots with a properly automated line. Let's talk.</p>
+    </div>
+
+  </div>
+
+  <button class="nav-btn prev" id="prevBtn" aria-label="Previous slide">&#10094;</button>
+  <button class="nav-btn next" id="nextBtn" aria-label="Next slide">&#10095;</button>
+
+  <div class="dots" id="dots"></div>
+
+</div>
+
+<script>
+  const track = document.getElementById('track');
+  const slides = document.querySelectorAll('.slide');
+  const dotsContainer = document.getElementById('dots');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const carousel = document.getElementById('carousel');
+
+  let currentIndex = 0;
+  const totalSlides = slides.length;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.classList.add('dot');
+    if (i === 0) dot.classList.add('active');
+    dot.dataset.slideIndex = i;
+    dotsContainer.appendChild(dot);
+  });
+
+  const dots = document.querySelectorAll('.dot');
+
+  function updateSlide() {
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentIndex);
+    });
+  }
+
+  function goNext() {
+    currentIndex = (currentIndex + 1) % totalSlides;
+    updateSlide();
+  }
+
+  function goPrev() {
+    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+    updateSlide();
+  }
+
+  nextBtn.addEventListener('click', goNext);
+  prevBtn.addEventListener('click', goPrev);
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      currentIndex = parseInt(dot.dataset.slideIndex);
+      updateSlide();
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') {
+      goNext();
+    } else if (e.key === 'ArrowLeft') {
+      goPrev();
+    }
+  });
+
+  carousel.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') {
+      goNext();
+    } else if (e.key === 'ArrowLeft') {
+      goPrev();
+    }
+  });
+
+  carousel.focus();
+</script>
+
+</body>
+</html>

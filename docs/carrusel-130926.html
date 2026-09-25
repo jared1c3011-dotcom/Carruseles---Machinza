@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machinza - Sterile Filling Line</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #0d1420;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:20px;
+  }
+
+  .carousel-wrap {
+    width:min(480px, 92vw);
+    height:min(600px, 90vh);
+    position:relative;
+  }
+
+  .carousel {
+    width:100%;
+    height:100%;
+    position:relative;
+    overflow:hidden;
+    border-radius:14px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.5);
+    background:#101826;
+  }
+
+  .slide {
+    position:absolute;
+    top:0; left:0;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    opacity:0;
+    visibility:hidden;
+    transition: opacity 0.45s ease;
+    padding:22px;
+    overflow-y:auto;
+  }
+
+  .slide.active {
+    opacity:1;
+    visibility:visible;
+    z-index:2;
+  }
+
+  .slide-header {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:8px;
+    flex-shrink:0;
+  }
+
+  .slide-number {
+    color:#5b7ea3;
+    font-size:11px;
+    letter-spacing:1px;
+    font-weight:600;
+  }
+
+  .slide-body {
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    gap:14px;
+    min-height:0;
+  }
+
+  .tag {
+    display:inline-block;
+    background:rgba(91,126,163,0.15);
+    border:1px solid rgba(91,126,163,0.4);
+    color:#8fb8e0;
+    font-size:11px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    padding:5px 14px;
+    border-radius:20px;
+    font-weight:600;
+  }
+
+  h1 {
+    font-size:24px;
+    color:#f2f5f8;
+    line-height:1.3;
+    font-weight:700;
+  }
+
+  h2 {
+    font-size:20px;
+    color:#f2f5f8;
+    line-height:1.3;
+    font-weight:700;
+  }
+
+  p {
+    font-size:14px;
+    color:#b7c4d4;
+    line-height:1.55;
+    max-width:380px;
+  }
+
+  .visual-box {
+    width:100%;
+    max-width:340px;
+    height:150px;
+    background:linear-gradient(135deg, #1a2942 0%, #0f1826 100%);
+    border:1px solid rgba(91,126,163,0.3);
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;
+    flex-shrink:0;
+  }
+
+  .vial-row {
+    display:flex;
+    gap:12px;
+    align-items:flex-end;
+  }
+
+  .vial {
+    width:18px;
+    height:60px;
+    background:linear-gradient(to bottom, rgba(200,220,240,0.15), rgba(200,220,240,0.35));
+    border:1px solid rgba(160,190,220,0.5);
+    border-radius:3px 3px 8px 8px;
+    position:relative;
+  }
+  .vial::before{
+    content:'';
+    position:absolute;
+    bottom:0; left:0; right:0;
+    height:60%;
+    background:linear-gradient(to top, #4a90b8, #3a7ba8);
+    border-radius:0 0 8px 8px;
+  }
+
+  .nozzle {
+    width:6px;
+    height:30px;
+    background:#5b7ea3;
+    margin:0 auto 4px;
+    border-radius:2px;
+  }
+
+  .stat-row {
+    display:flex;
+    gap:18px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+
+  .stat {
+    text-align:center;
+  }
+  .stat-num {
+    font-size:22px;
+    font-weight:800;
+    color:#8fb8e0;
+  }
+  .stat-label {
+    font-size:10px;
+    color:#8b9bb0;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+  }
+
+  ul.feature-list {
+    text-align:left;
+    max-width:320px;
+    list-style:none;
+  }
+  ul.feature-list li {
+    font-size:13px;
+    color:#c3cfdc;
+    padding:6px 0 6px 22px;
+    position:relative;
+    line-height:1.4;
+  }
+  ul.feature-list li::before {
+    content:'✓';
+    position:absolute;
+    left:0;
+    color:#5fa8d3;
+    font-weight:bold;
+  }
+
+  /* Nav buttons */
+  .nav-btn {
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    border:none;
+    background:rgba(15,24,38,0.85);
+    color:#dce8f5;
+    font-size:18px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:10;
+    transition: background 0.2s, transform 0.2s;
+    box-shadow:0 4px 12px rgba(0,0,0,0.3);
+  }
+  .nav-btn:hover {
+    background:rgba(91,126,163,0.9);
+  }
+  .nav-btn.prev { left:-16px; }
+  .nav-btn.next { right:-16px; }
+
+  .dots {
+    position:absolute;
+    bottom:-26px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:6px;
+  }
+  .dot {
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.25);
+    transition: background 0.3s, width 0.3s;
+  }
+  .dot.active {
+    background:#5fa8d3;
+    width:18px;
+    border-radius:4px;
+  }
+
+  /* ==== SLIDE 1: Hero animated ==== */
+  .hero-slide {
+    background: radial-gradient(circle at 50% 30%, #16233b 0%, #0a1120 100%);
+    justify-content:center;
+  }
+  .hero-slide .slide-body { gap:16px; }
+
+  .logo-pulse {
+    animation: fadeSlideIn 0.8s ease-out both;
+  }
+
+  .hero-title {
+    animation: scaleIn 0.9s cubic-bezier(.2,.8,.2,1) 0.15s both;
+    font-size:26px;
+  }
+
+  .hero-tag {
+    animation: fadeSlideIn 0.7s ease-out 0.05s both;
+  }
+
+  .hero-sub {
+    animation: fadeSlideIn 0.8s ease-out 0.35s both;
+  }
+
+  .hero-visual {
+    animation: fadeSlideIn 0.9s ease-out 0.5s both, floatY 3s ease-in-out 1.4s infinite;
+  }
+
+  .droplet {
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#5fa8d3;
+    position:absolute;
+    animation: dropFall 1.8s ease-in infinite;
+  }
+  .droplet:nth-child(1){ left:30%; animation-delay:0s; }
+  .droplet:nth-child(2){ left:50%; animation-delay:0.6s; }
+  .droplet:nth-child(3){ left:70%; animation-delay:1.2s; }
+
+  @keyframes fadeSlideIn {
+    from { opacity:0; transform:translateY(18px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  @keyframes scaleIn {
+    from { opacity:0; transform:scale(0.85); }
+    to { opacity:1; transform:scale(1); }
+  }
+  @keyframes floatY {
+    0%,100% { transform:translateY(0); }
+    50% { transform:translateY(-6px); }
+  }
+  @keyframes dropFall {
+    0% { top:20%; opacity:0; }
+    15% { opacity:1; }
+    85% { opacity:1; }
+    100% { top:75%; opacity:0; }
+  }
+  @keyframes glowPulse {
+    0%,100% { box-shadow:0 0 0 0 rgba(95,168,211,0.4); }
+    50% { box-shadow:0 0 0 8px rgba(95,168,211,0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="carousel-wrap">
+  <div class="carousel" id="carousel">
+
+    <!-- SLIDE 1 - Hero animado -->
+    <div class="slide active hero-slide" data-slide-index="0">
+      <div class="slide-header logo-pulse">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+        <span class="slide-number">01 / 07</span>
+      </div>
+      <div class="slide-body">
+        <span class="tag hero-tag">Pharmaceutical Process</span>
+        <h1 class="hero-title">Sterile Filling,<br>Zero Compromise</h1>
+        <div class="visual-box hero-visual" style="animation-name: fadeSlideIn, floatY, glowPulse;">
+          <div class="droplet"></div>
+          <div class="droplet"></div>
+          <div class="droplet"></div>
+          <div class="vial-row">
+            <div class="vial"></div>
+            <div class="vial"></div>
+            <div class="vial"></div>
+          </div>
+        </div>
+        <p class="hero-sub">Inside a real automated vial filling line built for precision manufacturing.</p>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide" data-slide-index="1">
+      <div class="slide-header">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+        <span class="slide-number">02 / 07</span>
+      </div>
+      <div class="slide-body">
+        <span class="tag">The Process</span>
+        <h2>Stainless Steel Precision</h2>
+        <div class="visual-box">
+          <div class="nozzle"></div>
+        </div>
+        <p>A sterile stainless steel machine fills glass vials with liquid medicine under strict clean room conditions.</p>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide" data-slide-index="2">
+      <div class="slide-header">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+        <span class="slide-number">03 / 07</span>
+      </div>
+      <div class="slide-body">
+        <span class="tag">Robotic Precision</span>
+        <h2>Nozzles Calibrated to the Micro-Liter</h2>
+        <p>Robotic nozzles dose each vial with exact accuracy, eliminating variation and human error in every cycle.</p>
+        <div class="stat-row">
+          <div class="stat">
+            <div class="stat-num">±0.01</div>
+            <div class="stat-label">mL Accuracy</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">100%</div>
+            <div class="stat-label">Traceable</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="slide" data-slide-index="3">
+      <div class="slide-header">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+        <span class="slide-number">04 / 07</span>
+      </div>
+      <div class="slide-body">
+        <span class="tag">Clean Room Standard</span>
+        <h2>Controlled Environment, Every Second</h2>
+        <p>Soft white lighting and filtered air maintain ISO-grade cleanliness throughout the entire filling cycle.</p>
+        <ul class="feature-list">
+          <li>Positive pressure airflow</li>
+          <li>HEPA filtration systems</li>
+          <li>Continuous particle monitoring</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div class="slide" data-slide-index="4">
+      <div class="slide-header">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+        <span class="slide-number">05 / 07</span>
+      </div>
+      <div class="slide-body">
+        <span class="tag">Slow Motion Detail</span>
+        <h2>Every Drop, Captured in Detail</h2>
+        <div class="visual-box">
+          <div class="vial-row">
+            <div class="vial"></div>
+            <div class="vial"></div>
+          </div>
+        </div>
+        <p>Shallow depth of field reveals the precision of each fill, frame by frame, drop by drop.</p>
+      </div>
+    </div>
+
+    <!-- SLIDE 6 -->
+    <div class="slide" data-slide-index="5">
+      <div class="slide-header">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+        <span class="slide-number">06 / 07</span>
+      </div>
+      <div class="slide-body">
+        <span class="tag">Why It Matters</span>
+        <h2>Automation Built for Compliance</h2>
+        <ul class="feature-list">
+          <li>Reduced contamination risk</li>
+          <li>Consistent batch quality</li>
+          <li>Full regulatory alignment</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SLIDE 7 - CTA -->
+    <div class="slide" data-slide-index="6">
+      <div class="slide-header">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+        <span class="slide-number">07 / 07</span>
+      </div>
+      <div class="slide-body">
+        <span class="tag">Machinza Engineering</span>
+        <h2>Precision Automation for Pharma Lines</h2>
+        <p>We design and integrate PLC-driven systems for sterile, high-accuracy production environments.</p>
+        <p style="font-size:13px; color:#8fb8e0; font-weight:600;">Let's talk about your line.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <button class="nav-btn prev" id="prevBtn" aria-label="Previous slide">&#8592;</button>
+  <button class="nav-btn next" id="nextBtn" aria-label="Next slide">&#8594;</button>
+
+  <div class="dots" id="dots"></div>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dotsContainer = document.getElementById('dots');
+  const total = slides.length;
+  let current = 0;
+
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.classList.add('dot');
+    if (i === 0) dot.classList.add('active');
+    dot.addEventListener('click', () => goToSlide(i));
+    dotsContainer.appendChild(dot);
+  }
+  const dots = document.querySelectorAll('.dot');
+
+  function goToSlide(index) {
+    if (index < 0) index = total - 1;
+    if (index >= total) index = 0;
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = index;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', () => goToSlide(current + 1));
+  document.getElementById('prevBtn').addEventListener('click', () => goToSlide(current - 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') goToSlide(current + 1);
+    if (e.key === 'ArrowLeft') goToSlide(current - 1);
+  });
+</script>
+
+</body>
+</html>

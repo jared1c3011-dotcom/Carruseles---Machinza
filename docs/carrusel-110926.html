@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machinza | Sterile Filling Line</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    overflow: hidden;
+    background: #0B1F33;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    height: 100%;
+  }
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    position: relative;
+  }
+  #app {
+    width: min(480px, 92vw);
+    height: min(600px, 90vh);
+    overflow: hidden;
+    position: relative;
+    background: #0B1F33;
+    border-radius: 12px;
+    box-shadow: 0 0 40px rgba(242,140,40,0.15);
+  }
+  .track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.4s ease;
+  }
+  .slide {
+    flex: 0 0 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 32px;
+    overflow: hidden;
+    position: relative;
+    color: #F5F5F5;
+  }
+  .logo-top {
+    position: absolute;
+    top: 20px;
+    left: 32px;
+  }
+  .tag {
+    color: #F28C28;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-size: 26px;
+    line-height: 1.25;
+    margin: 0 0 14px 0;
+    color: #FFFFFF;
+    font-weight: 700;
+  }
+  p {
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0 0 10px 0;
+    color: #D8DEE6;
+  }
+  .accent-line {
+    width: 46px;
+    height: 4px;
+    background: #F28C28;
+    margin: 14px 0;
+    border-radius: 2px;
+  }
+  .slide-num {
+    position: absolute;
+    bottom: 20px;
+    right: 32px;
+    font-size: 12px;
+    color: #6E7F94;
+  }
+
+  /* Slide 1 specific animated concept */
+  .slide1-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(242,140,40,0.18), transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(242,140,40,0.12), transparent 45%);
+    animation: bgPulse 5s ease-in-out infinite;
+  }
+  @keyframes bgPulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+  }
+  .concept-word {
+    font-size: 30px;
+    font-weight: 800;
+    color: #FFFFFF;
+    opacity: 0;
+    animation: fadeSlideUp 0.8s ease forwards;
+  }
+  .concept-word.delay1 { animation-delay: 0.15s; }
+  .concept-word.delay2 { animation-delay: 0.45s; color: #F28C28; }
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .concept-sub {
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
+    animation-delay: 0.9s;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .vial-icon {
+    width: 46px;
+    height: 46px;
+    margin-bottom: 18px;
+    opacity: 0;
+    animation: scaleIn 0.7s ease forwards;
+    animation-delay: 0.1s;
+  }
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.6); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* Nav buttons */
+  .nav-btn {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #F28C28;
+    color: #0B1F33;
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: background 0.2s ease;
+  }
+  .nav-btn:hover { background: #d9761c; }
+  #prevBtn { left: calc(50% - min(480px,92vw)/2 - 60px); }
+  #nextBtn { left: calc(50% + min(480px,92vw)/2 + 16px); }
+
+  @media (max-width: 700px) {
+    #prevBtn { left: 10px; }
+    #nextBtn { right: 10px; left: auto; }
+  }
+</style>
+</head>
+<body>
+
+<button class="nav-btn" id="prevBtn" aria-label="Previous slide">&#8592;</button>
+<button class="nav-btn" id="nextBtn" aria-label="Next slide">&#8594;</button>
+
+<div id="app">
+  <div class="track" id="track">
+
+    <!-- SLIDE 1 -->
+    <section class="slide" style="background: linear-gradient(180deg,#0B1F33 0%, #102b47 100%);">
+      <div class="slide1-bg"></div>
+      <div class="logo-top">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+      </div>
+      <div style="position:relative; z-index:1;">
+        <svg class="vial-icon" viewBox="0 0 24 24" fill="none" stroke="#F28C28" stroke-width="1.5">
+          <path d="M9 2h6v3l1 2v13a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V7l1-2V2z"/>
+          <line x1="7" y1="11" x2="17" y2="11"/>
+        </svg>
+        <p class="tag">Pharmaceutical Production</p>
+        <div class="concept-word delay1">Every dose</div>
+        <div class="concept-word delay2">must be exact.</div>
+        <div class="accent-line"></div>
+        <p class="concept-sub">Sterile filling is where precision becomes patient safety.</p>
+      </div>
+      <div class="slide-num">1 / 4</div>
+    </section>
+
+    <!-- SLIDE 2 -->
+    <section class="slide">
+      <div class="logo-top">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+      </div>
+      <p class="tag">What is sterile filling?</p>
+      <h1>Dosing inside a clean room</h1>
+      <div class="accent-line"></div>
+      <p>A filling line doses liquid or powder into vials, ampoules, or syringes inside a controlled clean room environment.</p>
+      <p>This controlled setting helps keep the product free from contamination throughout the process.</p>
+      <div class="slide-num">2 / 4</div>
+    </section>
+
+    <!-- SLIDE 3 -->
+    <section class="slide">
+      <div class="logo-top">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+      </div>
+      <p class="tag">Why it matters on the floor</p>
+      <h1>Precision protects, and prevents loss</h1>
+      <div class="accent-line"></div>
+      <p>Accurate dosing helps protect the patient receiving the final product.</p>
+      <p>It also helps avoid variations that could lead to losing an entire production lot.</p>
+      <div class="slide-num">3 / 4</div>
+    </section>
+
+    <!-- SLIDE 4 -->
+    <section class="slide" style="background: linear-gradient(180deg,#0B1F33 0%, #0e2439 100%);">
+      <div class="logo-top">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+      </div>
+      <p class="tag">How Machinza supports this</p>
+      <h1>Automation and care, working together</h1>
+      <div class="accent-line"></div>
+      <p>We work with PLCs, automation, and maintenance to help keep filling lines running as intended.</p>
+      <p style="color:#F28C28; font-weight:600;">Let's talk about your filling line.</p>
+      <div class="slide-num">4 / 4</div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  (function() {
+    const track = document.getElementById('track');
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    let current = 0;
+
+    function getSlideParam() {
+      const params = new URLSearchParams(window.location.search);
+      let n = parseInt(params.get('slide'), 10);
+      if (isNaN(n) || n < 1 || n > total) return 0;
+      return n - 1;
+    }
+
+    function goTo(index, animate) {
+      current = Math.max(0, Math.min(total - 1, index));
+      if (!animate) track.style.transition = 'none';
+      else track.style.transition = 'transform .4s ease';
+      track.style.transform = 'translateX(-' + (current * 100) + '%)';
+      if (!animate) {
+        requestAnimationFrame(() => {
+          track.style.transition = 'transform .4s ease';
+        });
+      }
+    }
+
+    current = getSlideParam();
+    goTo(current, false);
+
+    document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1, true));
+    document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1, true));
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') goTo(current + 1, true);
+      if (e.key === 'ArrowLeft') goTo(current - 1, true);
+    });
+  })();
+</script>
+
+
+<script>
+(function () {
+  var p = new URLSearchParams(location.search).get('slide');
+  if (!p) return;
+  var n = parseInt(p, 10) - 1;
+  function mostrar() {
+    var app = document.getElementById('app');
+    if (!app) return;
+    var slides = app.querySelectorAll('.slide');
+    if (!slides.length) slides = app.querySelectorAll('section');
+    if (!slides.length) return;
+    var track = app.querySelector('.track');
+    if (track) { track.style.transition = 'none'; track.style.transform = 'none'; }
+    for (var i = 0; i < slides.length; i++) {
+      slides[i].style.display = (i === n) ? 'flex' : 'none';
+      slides[i].style.transform = 'none';
+      slides[i].style.width = '100%';
+      slides[i].style.flex = '0 0 100%';
+    }
+  }
+  window.addEventListener('load', function () {
+    mostrar();
+    setTimeout(mostrar, 300);
+    setTimeout(mostrar, 900);
+  });
+})();
+</script>
+</body>
+</html>
+
+</html>

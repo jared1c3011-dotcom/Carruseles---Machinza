@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machinza | Batch Validation</title>
+<style>
+  html, body {
+    margin: 0;
+    overflow: hidden;
+    background: #071522;
+    font-family: 'Segoe UI', Arial, sans-serif;
+  }
+
+  #app {
+    width: min(480px, 92vw);
+    height: min(600px, 90vh);
+    overflow: hidden;
+    position: relative;
+    margin: 5vh auto;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    background: #0B1F33;
+  }
+
+  .track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.4s ease;
+  }
+
+  .slide {
+    flex: 0 0 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 32px;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(160deg, #0B1F33 0%, #0d2740 100%);
+    color: #EAF2F8;
+  }
+
+  .logo-corner {
+    position: absolute;
+    top: 18px;
+    left: 24px;
+  }
+
+  .badge {
+    position: absolute;
+    top: 18px;
+    right: 24px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #F28C28;
+    font-weight: 700;
+    border: 1px solid #F28C28;
+    padding: 3px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100%;
+    gap: 14px;
+  }
+
+  h1 {
+    font-size: 26px;
+    line-height: 1.25;
+    margin: 0;
+    font-weight: 800;
+    color: #FFFFFF;
+  }
+
+  h2 {
+    font-size: 22px;
+    line-height: 1.25;
+    margin: 0;
+    font-weight: 800;
+    color: #FFFFFF;
+  }
+
+  p {
+    font-size: 15px;
+    line-height: 1.45;
+    margin: 0;
+    color: #C9D6E3;
+    max-width: 95%;
+  }
+
+  .accent {
+    color: #F28C28;
+  }
+
+  .tag {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #F28C28;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .divider {
+    width: 46px;
+    height: 4px;
+    background: #F28C28;
+    border-radius: 4px;
+    margin: 4px 0;
+  }
+
+  /* Slide 1 - big animated stat */
+  .stat-slide {
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .stat-slide .content {
+    align-items: center;
+    text-align: center;
+  }
+
+  .big-number {
+    font-size: 84px;
+    font-weight: 900;
+    color: #F28C28;
+    margin: 0;
+    line-height: 1;
+    animation: scaleFade 0.9s ease-out;
+    text-shadow: 0 0 30px rgba(242,140,40,0.35);
+  }
+
+  .stat-slide h1 {
+    animation: slideUp 0.9s ease-out 0.15s both;
+  }
+
+  .stat-slide p {
+    animation: slideUp 0.9s ease-out 0.3s both;
+    max-width: 100%;
+  }
+
+  .stat-slide .tag {
+    animation: slideUp 0.9s ease-out 0.05s both;
+  }
+
+  .pulse-ring {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border: 2px solid rgba(242,140,40,0.25);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 2.4s ease-out infinite;
+  }
+
+  @keyframes scaleFade {
+    0% { opacity: 0; transform: scale(0.5); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes slideUp {
+    0% { opacity: 0; transform: translateY(18px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.8; }
+    100% { transform: translate(-50%, -50%) scale(1.3); opacity: 0; }
+  }
+
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .checklist li {
+    list-style: none;
+    font-size: 15px;
+    color: #C9D6E3;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    line-height: 1.35;
+  }
+
+  .checklist li::before {
+    content: "▸";
+    color: #F28C28;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+
+  .cta-box {
+    margin-top: 10px;
+    background: rgba(242,140,40,0.12);
+    border: 1px solid rgba(242,140,40,0.4);
+    padding: 12px 16px;
+    border-radius: 10px;
+  }
+
+  .cta-box p {
+    color: #F5C99B;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  /* Nav buttons */
+  .nav-btn {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #0B1F33;
+    color: #F28C28;
+    border: 2px solid #F28C28;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: background 0.2s, transform 0.2s;
+    user-select: none;
+  }
+
+  .nav-btn:hover {
+    background: #F28C28;
+    color: #0B1F33;
+  }
+
+  #prevBtn { left: 3vw; }
+  #nextBtn { right: 3vw; }
+
+  @media (max-width: 500px) {
+    .nav-btn { width: 38px; height: 38px; font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<button class="nav-btn" id="prevBtn" aria-label="Previous slide">&#8592;</button>
+<button class="nav-btn" id="nextBtn" aria-label="Next slide">&#8594;</button>
+
+<div id="app">
+  <div class="track" id="track">
+
+    <!-- Slide 1 -->
+    <section class="slide stat-slide">
+      <div class="pulse-ring"></div>
+      <div class="logo-corner"><img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;"></div>
+      <div class="content">
+        <p class="tag">Pharma Quality</p>
+        <p class="big-number">31%</p>
+        <h1>of pharma recalls trace back to batch release failures</h1>
+        <p>A single missed check can compromise an entire production run.</p>
+      </div>
+    </section>
+
+    <!-- Slide 2 -->
+    <section class="slide">
+      <div class="logo-corner"><img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;"></div>
+      <div class="badge">Why it matters</div>
+      <div class="content">
+        <p class="tag">Batch Validation</p>
+        <div class="divider"></div>
+        <h2>One unverified lot can put patients at risk</h2>
+        <p>Batch validation confirms every unit meets identity, potency, purity and safety specs before it ever reaches a shelf.</p>
+        <p>Without it, deviations go unnoticed until it's too late — recalls, fines, or worse.</p>
+      </div>
+    </section>
+
+    <!-- Slide 3 -->
+    <section class="slide">
+      <div class="logo-corner"><img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;"></div>
+      <div class="badge">What's needed</div>
+      <div class="content">
+        <p class="tag">The Proof</p>
+        <div class="divider"></div>
+        <h2>What confirms a lot is ready to ship</h2>
+        <ul class="checklist">
+          <li>Certificate of Analysis (CoA)</li>
+          <li>In-process & final lab test results</li>
+          <li>Batch production & deviation records</li>
+          <li>QA sign-off before release</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Slide 4 -->
+    <section class="slide">
+      <div class="logo-corner"><img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;"></div>
+      <div class="badge">Solution</div>
+      <div class="content">
+        <p class="tag">Machinza</p>
+        <div class="divider"></div>
+        <h2>We engineer systems that <span class="accent">never skip a check</span></h2>
+        <p>Machinza builds automated validation and traceability into your line, PLC controls and quality workflows — so no lot leaves without proof.</p>
+        <div class="cta-box">
+          <p>Ready to secure every batch release? Let's talk.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  (function() {
+    var track = document.getElementById('track');
+    var slides = document.querySelectorAll('.slide');
+    var total = slides.length;
+    var current = 0;
+
+    function getSlideParam() {
+      var params = new URLSearchParams(window.location.search);
+      var s = parseInt(params.get('slide'), 10);
+      if (isNaN(s) || s < 1 || s > total) return 1;
+      return s;
+    }
+
+    function goTo(index, animate) {
+      current = Math.max(0, Math.min(total - 1, index));
+      if (!animate) {
+        track.style.transition = 'none';
+      } else {
+        track.style.transition = 'transform 0.4s ease';
+      }
+      track.style.transform = 'translateX(-' + (current * 100) + '%)';
+      if (!animate) {
+        void track.offsetHeight;
+        track.style.transition = 'transform 0.4s ease';
+      }
+    }
+
+    var initial = getSlideParam() - 1;
+    goTo(initial, false);
+
+    document.getElementById('nextBtn').addEventListener('click', function() {
+      goTo(current + 1, true);
+    });
+
+    document.getElementById('prevBtn').addEventListener('click', function() {
+      goTo(current - 1, true);
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowRight') {
+        goTo(current + 1, true);
+      } else if (e.key === 'ArrowLeft') {
+        goTo(current - 1, true);
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>

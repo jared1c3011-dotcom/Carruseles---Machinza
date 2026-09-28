@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machinza - Batch Validation</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #0d1520;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:16px;
+  }
+  .carousel-wrap {
+    width:min(480px, 92vw);
+    height:min(600px, 90vh);
+    position:relative;
+  }
+  .carousel {
+    width:100%;
+    height:100%;
+    position:relative;
+    background:#101823;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 20px 50px rgba(0,0,0,0.5);
+    border:1px solid #223142;
+  }
+  .slide {
+    position:absolute;
+    top:0; left:0;
+    width:100%;
+    height:100%;
+    display:none;
+    flex-direction:column;
+    padding:28px 26px;
+    overflow-y:auto;
+  }
+  .slide.active {
+    display:flex;
+  }
+  .logo-row {
+    display:flex;
+    justify-content:flex-start;
+    align-items:center;
+    margin-bottom:10px;
+    flex-shrink:0;
+  }
+  .content-center {
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:flex-start;
+    gap:14px;
+  }
+  .tag {
+    display:inline-block;
+    background:#1c3a52;
+    color:#5ec6dc;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    padding:5px 12px;
+    border-radius:20px;
+    border:1px solid #2c5674;
+  }
+  h1 {
+    font-size:26px;
+    color:#f2f5f8;
+    line-height:1.25;
+    font-weight:800;
+  }
+  h2 {
+    font-size:22px;
+    color:#f2f5f8;
+    line-height:1.3;
+    font-weight:800;
+  }
+  p {
+    font-size:14px;
+    color:#b7c4d1;
+    line-height:1.5;
+    max-width:100%;
+  }
+  ul {
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    width:100%;
+  }
+  li {
+    font-size:14px;
+    color:#dbe4ec;
+    line-height:1.4;
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    background:#16202d;
+    padding:10px 12px;
+    border-radius:10px;
+    border-left:3px solid #5ec6dc;
+  }
+  li .num {
+    color:#5ec6dc;
+    font-weight:800;
+    font-size:14px;
+    flex-shrink:0;
+  }
+  .accent-line {
+    width:46px;
+    height:4px;
+    background:#5ec6dc;
+    border-radius:2px;
+  }
+  .footer-note {
+    font-size:11px;
+    color:#5c7387;
+    margin-top:10px;
+    flex-shrink:0;
+  }
+
+  /* Slide 1 animations */
+  #slide1 .logo-row { animation: fadeIn 0.6s ease forwards; opacity:0; }
+  #slide1 .tag { animation: slideUp 0.7s ease 0.2s forwards; opacity:0; }
+  #slide1 h1 { animation: scaleIn 0.8s cubic-bezier(.2,.8,.2,1) 0.35s forwards; opacity:0; }
+  #slide1 p { animation: fadeIn 0.8s ease 0.6s forwards; opacity:0; }
+  #slide1 .accent-line { animation: growLine 0.6s ease 0.55s forwards; width:0; }
+  #slide1 .content-center { background:
+      radial-gradient(circle at 85% 15%, rgba(94,198,220,0.12), transparent 55%);
+  }
+
+  @keyframes fadeIn {
+    from { opacity:0; }
+    to { opacity:1; }
+  }
+  @keyframes slideUp {
+    from { opacity:0; transform:translateY(18px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  @keyframes scaleIn {
+    from { opacity:0; transform:scale(0.85); }
+    to { opacity:1; transform:scale(1); }
+  }
+  @keyframes growLine {
+    from { width:0; }
+    to { width:46px; }
+  }
+
+  /* Nav buttons */
+  .nav-btn {
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:rgba(16,24,35,0.85);
+    border:1px solid #2c5674;
+    color:#5ec6dc;
+    font-size:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    z-index:10;
+    user-select:none;
+    transition:background 0.2s;
+  }
+  .nav-btn:hover { background:#1c3a52; }
+  .nav-left { left:-14px; }
+  .nav-right { right:-14px; }
+
+  .dots {
+    display:flex;
+    justify-content:center;
+    gap:7px;
+    margin-top:14px;
+  }
+  .dot {
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#2c3e50;
+    transition:background 0.3s, width 0.3s;
+  }
+  .dot.active {
+    background:#5ec6dc;
+    width:20px;
+    border-radius:4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="carousel-wrap">
+  <div class="carousel" id="carousel">
+
+    <div class="slide active" id="slide1">
+      <div class="logo-row">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+      </div>
+      <div class="content-center">
+        <span class="tag">Pharma / Quality</span>
+        <h1>Batch Validation:<br>Confirms It Complies</h1>
+        <div class="accent-line"></div>
+        <p>No batch leaves the plant without documented proof it meets specification.</p>
+      </div>
+    </div>
+
+    <div class="slide" id="slide2">
+      <div class="logo-row">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+      </div>
+      <div class="content-center">
+        <span class="tag">What It Is</span>
+        <h2>What Is Batch Validation?</h2>
+        <p>A documented process confirming that a manufactured batch consistently meets its predefined quality specifications, before it is released for distribution.</p>
+        <p>It links raw materials, process parameters, and lab results into one traceable record.</p>
+      </div>
+    </div>
+
+    <div class="slide" id="slide3">
+      <div class="logo-row">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+      </div>
+      <div class="content-center">
+        <span class="tag">Proof Required</span>
+        <h2>What Confirms Compliance</h2>
+        <ul>
+          <li><span class="num">01</span>Batch record & process log review</li>
+          <li><span class="num">02</span>Lab test results (purity, potency, sterility)</li>
+          <li><span class="num">03</span>Equipment qualification & calibration data</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="slide" id="slide4">
+      <div class="logo-row">
+        <img src="https://jared1c3011-dotcom.github.io/Carruseles---Machinza/assets/logo.png" alt="Machinza" style="height:22px;display:block;">
+      </div>
+      <div class="content-center">
+        <span class="tag">Why It Matters</span>
+        <h2>Why No Product Ships Without It</h2>
+        <p>Skipping validation risks patient safety, regulatory penalties, and product recalls.</p>
+        <p>Every release decision is backed by evidence — not assumption.</p>
+        <div class="footer-note">Machinza — Industrial Engineering & Automation</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="nav-btn nav-left" id="prevBtn">&#10094;</div>
+  <div class="nav-btn nav-right" id="nextBtn">&#10095;</div>
+</div>
+
+<div class="dots" id="dots"></div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dotsContainer = document.getElementById('dots');
+  let current = 0;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.classList.add('dot');
+    if (i === 0) dot.classList.add('active');
+    dot.setAttribute('data-slide-index', i);
+    dot.addEventListener('click', () => goToSlide(i));
+    dotsContainer.appendChild(dot);
+  });
+
+  const dots = document.querySelectorAll('.dot');
+
+  function goToSlide(index) {
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = index;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', () => goToSlide(current + 1));
+  document.getElementById('prevBtn').addEventListener('click', () => goToSlide(current - 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') goToSlide(current + 1);
+    if (e.key === 'ArrowLeft') goToSlide(current - 1);
+  });
+</script>
+
+</body>
+</html>
